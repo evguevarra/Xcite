@@ -1,6 +1,6 @@
-# event_app
+# Xcite
 
-A new Flutter project.
+Event Countdown App
 
 ## Getting Started
 
