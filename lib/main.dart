@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       title: 'XCite',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.cyan,
       ),
       home: const LoginPage(),
     );
