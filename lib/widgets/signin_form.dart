@@ -9,8 +9,9 @@ class SigninForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.5,
+      //decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -23,28 +24,10 @@ class SigninForm extends StatelessWidget {
                 ),
               ],
             ),
-            const TextField(
-              decoration: InputDecoration(
-                hintText: 'Email address',
-                prefixIcon: Icon(
-                  Icons.email,
-                  color: Colors.cyan,
-                ),
-                border: UnderlineInputBorder(),
-              ),
-              keyboardType: TextInputType.emailAddress,
-              textInputAction: TextInputAction.done,
-            ),
-            const TextField(
-              decoration: InputDecoration(
-                hintText: 'Password',
-                prefixIcon: Icon(
-                  Icons.lock,
-                  color: Colors.cyan,
-                ),
-                border: UnderlineInputBorder(),
-              ),
-              obscureText: true,
+            buildEmail(),
+            buildPassword(),
+            const SizedBox(
+              height: 8,
             ),
             ElevatedButton(
               onPressed: () {},
@@ -63,10 +46,60 @@ class SigninForm extends StatelessWidget {
                 'Forgot Password?',
                 style: TextStyle(fontSize: 10, color: Colors.grey),
               ),
+            ),
+            Text(
+              'Or Login using Social Media:',
+              style: TextStyle(
+                fontSize: 8,
+                color: Colors.grey.shade400,
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  "assets/images/fb.png",
+                ),
+                const SizedBox(
+                  width: 24,
+                ),
+                Image.asset(
+                  "assets/images/google.png",
+                ),
+              ],
             )
           ],
         ),
       ),
+    );
+  }
+
+  TextField buildPassword() {
+    return const TextField(
+      decoration: InputDecoration(
+        hintText: 'Password',
+        prefixIcon: Icon(
+          Icons.lock,
+          color: Colors.cyan,
+        ),
+        border: UnderlineInputBorder(),
+      ),
+      obscureText: true,
+    );
+  }
+
+  TextField buildEmail() {
+    return const TextField(
+      decoration: InputDecoration(
+        hintText: 'Email address',
+        prefixIcon: Icon(
+          Icons.email,
+          color: Colors.cyan,
+        ),
+        border: UnderlineInputBorder(),
+      ),
+      keyboardType: TextInputType.emailAddress,
+      textInputAction: TextInputAction.done,
     );
   }
 }
