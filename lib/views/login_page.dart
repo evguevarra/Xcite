@@ -33,8 +33,12 @@ class _LoginPageState extends State<LoginPage> {
           _buildHeader(context),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child:
-                Card(child: isSignin ? const SigninForm() : const SignupForm()),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: isSignin ? const SigninForm() : const SignupForm(),
+            ),
           ),
           _loginToSignupChanger(),
           const SizedBox(
