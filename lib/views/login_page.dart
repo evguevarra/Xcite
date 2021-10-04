@@ -1,5 +1,7 @@
 import 'package:event_app/widgets/blob_painter.dart';
 import 'package:event_app/widgets/signin_form.dart';
+import 'package:event_app/widgets/signup_form.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -13,6 +15,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool isSignin = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,16 +30,78 @@ class _LoginPageState extends State<LoginPage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              CustomPaint(
-                size: Size(200, (180 * 1.0114942528735633).toDouble()),
-                painter: RPSCustomPainter(),
+          _buildHeader(context),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
               ),
-            ],
+              child: isSignin ? const SigninForm() : const SignupForm(),
+            ),
           ),
-          Column(
+          _loginToSignupChanger(),
+          const SizedBox(
+            height: 8,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _loginToSignupChanger() {
+    return RichText(
+      text: TextSpan(
+        children: <TextSpan>[
+          TextSpan(
+            text: isSignin
+                ? "Don't have an account? "
+                : "Already have an account?",
+            style: const TextStyle(color: Colors.grey),
+          ),
+          TextSpan(
+            text: isSignin ? " Register Now" : " Login Now",
+            style: const TextStyle(
+              color: Colors.cyan,
+              fontWeight: FontWeight.bold,
+            ),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                if (isSignin) {
+                  setState(() {
+                    isSignin = false;
+                  });
+                } else {
+                  setState(() {
+                    isSignin = true;
+                  });
+                }
+              },
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            CustomPaint(
+              size: Size(200, (180 * 1.0114942528735633).toDouble()),
+              painter: RPSCustomPainter(),
+            ),
+          ],
+        ),
+        Positioned(
+          width: MediaQuery.of(context).size.width,
+          top: 100,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: const [
               Text(
                 'XCITE',
@@ -54,30 +119,8 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ],
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: Card(child: SigninForm()),
-          ),
-          RichText(
-            text: const TextSpan(
-              children: <TextSpan>[
-                TextSpan(
-                  text: "Don't have an account? ",
-                  style: TextStyle(color: Colors.grey),
-                ),
-                TextSpan(
-                  text: "Register Now",
-                  style: TextStyle(
-                      color: Colors.cyan, fontWeight: FontWeight.bold),
-                )
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
