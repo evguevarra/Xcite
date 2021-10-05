@@ -15,11 +15,10 @@ class SigninForm extends StatefulWidget {
 class _SigninFormState extends State<SigninForm> {
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
-  final TextEditingController emailSigninController =
-      new TextEditingController();
+  final TextEditingController emailSigninController = TextEditingController();
 
   final TextEditingController passwordSigninController =
-      new TextEditingController();
+      TextEditingController();
 
   final _auth = FirebaseAuth.instance;
 
