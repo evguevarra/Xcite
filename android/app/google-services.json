@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "362749262027",
+    "project_id": "xcite-event-countdown",
+    "storage_bucket": "xcite-event-countdown.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:362749262027:android:b1e2e8be3117fad07e834e",
+        "android_client_info": {
+          "package_name": "com.example.event_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "362749262027-hmhgniebrqi6dpb90tcs6ec2je2kt59o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.event_app",
+            "certificate_hash": "937e7f4a7007f3ed4ead222259c5891f7ad86068"
+          }
+        },
+        {
+          "client_id": "362749262027-9v83v82jag9g8u4k9kakklf99dh71kep.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDreeI8nPL1_PS5b8CIOLMT1YtK18hITjg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "362749262027-9v83v82jag9g8u4k9kakklf99dh71kep.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,105 +1,178 @@
+import 'package:event_app/views/homepage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-class SigninForm extends StatelessWidget {
+class SigninForm extends StatefulWidget {
   const SigninForm({
     Key? key,
   }) : super(key: key);
 
   @override
+  State<SigninForm> createState() => _SigninFormState();
+}
+
+class _SigninFormState extends State<SigninForm> {
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+
+  final TextEditingController emailSigninController = TextEditingController();
+
+  final TextEditingController passwordSigninController =
+      TextEditingController();
+
+  final _auth = FirebaseAuth.instance;
+
+  bool _passwordVisible = false;
+  @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.5,
-      //decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: const [
-                Text(
-                  'Sign in',
-                  style: TextStyle(color: Colors.cyan, fontSize: 20),
-                ),
-              ],
-            ),
-            buildEmail(),
-            buildPassword(),
-            const SizedBox(
-              height: 8,
-            ),
-            ElevatedButton(
-              onPressed: () {},
-              child: const Text(
-                'LOGIN',
-                style: TextStyle(color: Colors.white),
+    return Form(
+      key: _key,
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height * 0.6,
+        //decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: const [
+                  Text(
+                    'Sign in',
+                    style: TextStyle(color: Colors.cyan, fontSize: 20),
+                  ),
+                ],
               ),
-              style: ElevatedButton.styleFrom(
-                  shape: const StadiumBorder(),
-                  minimumSize:
-                      Size(MediaQuery.of(context).size.width * 0.7, 40)),
-            ),
-            TextButton(
-              onPressed: () {},
-              child: const Text(
-                'Forgot Password?',
-                style: TextStyle(fontSize: 10, color: Colors.grey),
+              buildEmail(),
+              buildPassword(),
+              const SizedBox(
+                height: 8,
               ),
-            ),
-            Text(
-              'Or Login using Social Media:',
-              style: TextStyle(
-                fontSize: 8,
-                color: Colors.grey.shade400,
+              buildSigninButton(context),
+              TextButton(
+                onPressed: () {},
+                child: const Text(
+                  'Forgot Password?',
+                  style: TextStyle(fontSize: 10, color: Colors.grey),
+                ),
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  "assets/images/fb.png",
+              Text(
+                'Or Login using Social Media:',
+                style: TextStyle(
+                  fontSize: 8,
+                  color: Colors.grey.shade400,
                 ),
-                const SizedBox(
-                  width: 24,
-                ),
-                Image.asset(
-                  "assets/images/google.png",
-                ),
-              ],
-            )
-          ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    "assets/images/fb.png",
+                  ),
+                  const SizedBox(
+                    width: 24,
+                  ),
+                  Image.asset(
+                    "assets/images/google.png",
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 
-  TextField buildPassword() {
-    return const TextField(
+  Widget buildSigninButton(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        signIn(emailSigninController.text, passwordSigninController.text);
+      },
+      child: const Text(
+        'LOGIN',
+        style: TextStyle(color: Colors.white),
+      ),
+      style: ElevatedButton.styleFrom(
+          shape: const StadiumBorder(),
+          minimumSize: Size(MediaQuery.of(context).size.width * 0.7, 40)),
+    );
+  }
+
+  TextFormField buildPassword() {
+    return TextFormField(
+      obscureText: !_passwordVisible,
+      controller: passwordSigninController,
+      validator: validatePassword,
       decoration: InputDecoration(
-        hintText: 'Password',
-        prefixIcon: Icon(
+        labelText: "Password",
+        //hintText: 'Password',
+        prefixIcon: const Icon(
           Icons.lock,
           color: Colors.cyan,
         ),
-        border: UnderlineInputBorder(),
+        suffixIcon: IconButton(
+          onPressed: () {
+            setState(() {
+              _passwordVisible = !_passwordVisible;
+            });
+          },
+          icon: Icon(
+            _passwordVisible ? Icons.visibility : Icons.visibility_off,
+            color: Colors.grey,
+          ),
+        ),
       ),
-      obscureText: true,
     );
   }
 
-  TextField buildEmail() {
-    return const TextField(
-      decoration: InputDecoration(
-        hintText: 'Email address',
+  TextFormField buildEmail() {
+    return TextFormField(
+      controller: emailSigninController,
+      validator: validateEmail,
+      decoration: const InputDecoration(
+        labelText: "Email",
+        //hintText: 'Email address',
         prefixIcon: Icon(
           Icons.email,
           color: Colors.cyan,
         ),
-        border: UnderlineInputBorder(),
+        // border: UnderlineInputBorder(),
       ),
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.done,
     );
+  }
+
+  String? validateEmail(String? formEmail) {
+    if (formEmail!.isEmpty) return 'Email is required!';
+    return null;
+  }
+
+  String? validatePassword(String? formPassword) {
+    if (formPassword!.isEmpty) return 'Password is required!';
+    return null;
+  }
+
+  void signIn(String email, String password) async {
+    if (_key.currentState!.validate()) {
+      await _auth
+          .signInWithEmailAndPassword(email: email, password: password)
+          .then((uid) => {
+                Fluttertoast.showToast(
+                  msg: "Login Successful",
+                  toastLength: Toast.LENGTH_SHORT,
+                ),
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => const HomePage()))
+              })
+          .catchError((e) {
+        Fluttertoast.showToast(
+          msg: e!.message,
+          toastLength: Toast.LENGTH_SHORT,
+        );
+      });
+    }
   }
 }
