@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_app/models/user.dart';
 import 'package:event_app/views/login_page.dart';
+import 'package:event_app/widgets/homepage_blob.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -30,9 +31,12 @@ class _HomPageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Hello'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        // title: const Text('Hello'),
         actions: [
           IconButton(
               onPressed: () {
@@ -44,13 +48,67 @@ class _HomPageState extends State<HomePage> {
               ))
         ],
       ),
-      body: Center(
-        child: Text('${loggedInUser.fullName}'),
+      extendBodyBehindAppBar: true,
+      body: Column(
+        children: [
+          buildHeader(width),
+          buildEmptyEvents(),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
         child: const Icon(Icons.add),
       ),
+    );
+  }
+
+  Widget buildEmptyEvents() {
+    return Column(
+      children: [
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.2,
+        ),
+        const Center(
+          child: Text(
+            'No Event Added!',
+            style: TextStyle(color: Colors.grey),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildHeader(double width) {
+    return Stack(
+      children: [
+        CustomPaint(
+          size: Size(width, (width * 0.6217391304347826).toDouble()),
+          painter: HomeCustomPainter(),
+        ),
+        Positioned(
+          top: 45,
+          left: 20,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Hello,',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 40.0,
+                ),
+              ),
+              Text(
+                '${loggedInUser.fullName}',
+                style: TextStyle(
+                  color: Colors.grey.shade600,
+                  fontSize: 24.0,
+                ),
+              )
+            ],
+          ),
+        )
+      ],
     );
   }
 
