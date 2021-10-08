@@ -9,6 +9,9 @@ class AddEventDialog extends StatefulWidget {
 
 class _AddEventDialogState extends State<AddEventDialog> {
   DateTime? date;
+  TimeOfDay? time;
+  String? value;
+  final items = ['Birthday', 'Love', 'Celebration', 'Education', 'Others'];
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -30,11 +33,11 @@ class _AddEventDialogState extends State<AddEventDialog> {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 32),
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(24.0),
               child: Text(
                 'Add an Event',
                 style: TextStyle(
@@ -44,8 +47,26 @@ class _AddEventDialogState extends State<AddEventDialog> {
                 ),
               ),
             ),
+            const SizedBox(
+              height: 8,
+            ),
             buildEventNameField(),
+            const SizedBox(
+              height: 16,
+            ),
             buildDateField(),
+            const SizedBox(
+              height: 16,
+            ),
+            buildTimeField(),
+            const SizedBox(
+              height: 24,
+            ),
+            buildThemeDropdown(),
+            const SizedBox(
+              height: 16,
+            ),
+            buildAddButton(context),
           ],
         ),
       ),
@@ -88,11 +109,66 @@ class _AddEventDialogState extends State<AddEventDialog> {
     );
   }
 
+  Widget buildTimeField() {
+    return TextFormField(
+      onTap: () {
+        pickTime(context);
+      },
+      readOnly: true,
+      //controller: emailSigninController,
+      //validator: validateEmail,
+      decoration: InputDecoration(
+        hintText: getTimeText(),
+        //hintText: 'Email address',
+        prefixIcon: const Icon(
+          Icons.access_time,
+          color: Colors.cyan,
+        ),
+      ),
+    );
+  }
+
+  Widget buildThemeDropdown() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey, width: 2),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          hint: const Text('Select Event Theme'),
+          value: value,
+          isExpanded: true,
+          items: items.map(buildThemeItem).toList(),
+          onChanged: (value) {
+            setState(() {
+              this.value = value;
+            });
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget buildAddButton(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {},
+      child: const Text(
+        'ADD EVENT',
+        style: TextStyle(color: Colors.white),
+      ),
+      style: ElevatedButton.styleFrom(
+          shape: const StadiumBorder(),
+          minimumSize: Size(MediaQuery.of(context).size.width * 0.5, 40)),
+    );
+  }
+
   Future pickDate(BuildContext context) async {
     final initialDate = DateTime.now();
     final newDate = await showDatePicker(
       context: context,
-      initialDate: initialDate,
+      initialDate: date ?? initialDate,
       firstDate: DateTime(DateTime.now().year),
       lastDate: DateTime(2100),
     );
@@ -103,11 +179,43 @@ class _AddEventDialogState extends State<AddEventDialog> {
     });
   }
 
+  Future pickTime(BuildContext context) async {
+    const initialTime = TimeOfDay(hour: 9, minute: 0);
+    final newTime = await showTimePicker(
+      context: context,
+      initialTime: time ?? initialTime,
+    );
+
+    if (newTime == null) return;
+    setState(() {
+      time = newTime;
+    });
+  }
+
+  String getTimeText() {
+    if (time == null) {
+      return 'Select Time';
+    } else {
+      final hours = time!.hour.toString().padLeft(2, '0');
+      final minutes = time!.minute.toString().padLeft(2, '0');
+
+      return '$hours:$minutes';
+    }
+  }
+
   String getDateText() {
     if (date == null) {
       return 'Select Date';
     } else {
       return '${date!.year}-${date!.month}-${date!.day}';
     }
+  }
+
+  DropdownMenuItem<String> buildThemeItem(String item) {
+    return DropdownMenuItem(
+        value: item,
+        child: Text(
+          item,
+        ));
   }
 }
