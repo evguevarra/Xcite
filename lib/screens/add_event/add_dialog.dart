@@ -1,3 +1,4 @@
+import 'package:event_app/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 
 class AddEventDialog extends StatefulWidget {
@@ -19,14 +20,13 @@ class _AddEventDialogState extends State<AddEventDialog> {
         borderRadius: BorderRadius.circular(16),
       ),
       elevation: 0,
-      //backgroundColor: Colors.transparent,
       child: _buildChild(context),
     );
   }
 
   _buildChild(BuildContext context) {
     return Container(
-      height: 450,
+      height: 420,
       decoration: BoxDecoration(
         color: Colors.white,
         //shape: BoxShape.rectangle,
@@ -50,13 +50,19 @@ class _AddEventDialogState extends State<AddEventDialog> {
             const SizedBox(
               height: 8,
             ),
-            buildEventNameField(),
+            const CreateTextField(
+              labelText: 'Event Name',
+              prefixIcon: Icons.event,
+              obscure: false,
+              validator: null,
+              readOnly: false,
+            ),
             const SizedBox(
-              height: 16,
+              height: 8,
             ),
             buildDateField(),
             const SizedBox(
-              height: 16,
+              height: 8,
             ),
             buildTimeField(),
             const SizedBox(
@@ -64,29 +70,12 @@ class _AddEventDialogState extends State<AddEventDialog> {
             ),
             buildThemeDropdown(),
             const SizedBox(
-              height: 16,
+              height: 8,
             ),
             buildAddButton(context),
           ],
         ),
       ),
-    );
-  }
-
-  TextFormField buildEventNameField() {
-    return TextFormField(
-      //controller: emailSigninController,
-      //validator: validateEmail,
-      decoration: const InputDecoration(
-        labelText: "Event Name",
-        //hintText: 'Email address',
-        prefixIcon: Icon(
-          Icons.event,
-          color: Colors.cyan,
-        ),
-        //border: ,
-      ),
-      textInputAction: TextInputAction.done,
     );
   }
 

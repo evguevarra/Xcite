@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_app/models/user.dart';
-import 'package:event_app/views/homepage.dart';
+import 'package:event_app/screens/home/homepage.dart';
+import 'package:event_app/widgets/blue_button.dart';
+import 'package:event_app/widgets/social_login.dart';
+import 'package:event_app/widgets/text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -19,10 +22,8 @@ class _SignupFormState extends State<SignupForm> {
   bool _passwordVisible = false;
 
   final TextEditingController emailSignupController = TextEditingController();
-
   final TextEditingController passwordSignupController =
       TextEditingController();
-
   final TextEditingController fullNameSignupController =
       TextEditingController();
 
@@ -34,7 +35,6 @@ class _SignupFormState extends State<SignupForm> {
       key: _key,
       child: SizedBox(
         height: MediaQuery.of(context).size.height * 0.65,
-        //decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -49,111 +49,54 @@ class _SignupFormState extends State<SignupForm> {
                   ),
                 ],
               ),
-              buildFullName(),
-              buildSignupEmail(),
-              buildSignupPassword(),
+              CreateTextField(
+                labelText: 'Full Name',
+                obscure: false,
+                validator: validateFullName,
+                controller: fullNameSignupController,
+                readOnly: false,
+                prefixIcon: Icons.person_rounded,
+              ),
+              CreateTextField(
+                labelText: 'Email Address',
+                obscure: false,
+                validator: validateEmail,
+                controller: emailSignupController,
+                readOnly: false,
+                prefixIcon: Icons.email,
+                keyboardType: TextInputType.emailAddress,
+              ),
+              CreateTextField(
+                labelText: 'Password',
+                obscure: !_passwordVisible,
+                controller: passwordSignupController,
+                validator: validatePassword,
+                readOnly: false,
+                prefixIcon: Icons.lock,
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _passwordVisible = !_passwordVisible;
+                    });
+                  },
+                  icon: Icon(
+                    _passwordVisible ? Icons.visibility : Icons.visibility_off,
+                  ),
+                ),
+              ),
               const SizedBox(
                 height: 8,
               ),
-              buildSignupButton(context),
-              Text(
-                'Or Login using Social Media:',
-                style: TextStyle(
-                  fontSize: 8,
-                  color: Colors.grey.shade400,
-                ),
+              CreateButton(
+                text: 'SIGNUP',
+                onPressed: () => signUp(
+                    emailSignupController.text, passwordSignupController.text),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    "assets/images/fb.png",
-                  ),
-                  const SizedBox(
-                    width: 24,
-                  ),
-                  Image.asset(
-                    "assets/images/google.png",
-                  ),
-                ],
-              )
+              const CreateSocialLogin(),
             ],
           ),
         ),
       ),
-    );
-  }
-
-  Widget buildSignupButton(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {
-        signUp(emailSignupController.text, passwordSignupController.text);
-      },
-      child: const Text(
-        'SIGNUP',
-        style: TextStyle(color: Colors.white),
-      ),
-      style: ElevatedButton.styleFrom(
-          shape: const StadiumBorder(),
-          minimumSize: Size(MediaQuery.of(context).size.width * 0.7, 40)),
-    );
-  }
-
-  TextFormField buildFullName() {
-    return TextFormField(
-      controller: fullNameSignupController,
-      decoration: const InputDecoration(
-        labelText: 'Full Name',
-        prefixIcon: Icon(
-          Icons.person_rounded,
-          color: Colors.cyan,
-        ),
-        //border: UnderlineInputBorder(),
-      ),
-      validator: validateFullName,
-      textInputAction: TextInputAction.done,
-    );
-  }
-
-  TextFormField buildSignupPassword() {
-    return TextFormField(
-      controller: passwordSignupController,
-      obscureText: !_passwordVisible,
-      decoration: InputDecoration(
-        labelText: 'Password',
-        prefixIcon: const Icon(
-          Icons.lock,
-          color: Colors.cyan,
-        ),
-        suffixIcon: IconButton(
-          onPressed: () {
-            setState(() {
-              _passwordVisible = !_passwordVisible;
-            });
-          },
-          icon: Icon(
-            _passwordVisible ? Icons.visibility : Icons.visibility_off,
-            color: Colors.grey,
-          ),
-        ),
-      ),
-      validator: validatePassword,
-    );
-  }
-
-  TextFormField buildSignupEmail() {
-    return TextFormField(
-      controller: emailSignupController,
-      decoration: const InputDecoration(
-        labelText: 'Email address',
-        prefixIcon: Icon(
-          Icons.email,
-          color: Colors.cyan,
-        ),
-      ),
-      validator: validateEmail,
-      keyboardType: TextInputType.emailAddress,
-      textInputAction: TextInputAction.done,
     );
   }
 

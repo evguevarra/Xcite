@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_app/models/user.dart';
-import 'package:event_app/views/login_page.dart';
-import 'package:event_app/widgets/add_dialog.dart';
-import 'package:event_app/widgets/homepage_blob.dart';
+import 'package:event_app/screens/login/login_page.dart';
+import 'package:event_app/screens/add_event/add_dialog.dart';
+import 'package:event_app/screens/home/homepage_blob.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -34,9 +34,11 @@ class _HomPageState extends State<HomePage> {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+
         // title: const Text('Hello'),
         actions: [
           IconButton(
