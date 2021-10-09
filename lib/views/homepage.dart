@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_app/models/user.dart';
 import 'package:event_app/views/login_page.dart';
+import 'package:event_app/widgets/add_dialog.dart';
 import 'package:event_app/widgets/homepage_blob.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +57,9 @@ class _HomPageState extends State<HomePage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          showAddDialog(context);
+        },
         child: const Icon(Icons.add),
       ),
     );
@@ -109,6 +112,15 @@ class _HomPageState extends State<HomePage> {
           ),
         )
       ],
+    );
+  }
+
+  void showAddDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const AddEventDialog();
+      },
     );
   }
 
