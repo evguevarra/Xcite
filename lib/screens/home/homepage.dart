@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_app/models/user.dart';
+import 'package:event_app/screens/add_event/add_event_dialog.dart';
 import 'package:event_app/screens/login/login_page.dart';
-import 'package:event_app/screens/add_event/add_dialog.dart';
 import 'package:event_app/screens/home/homepage_blob.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -121,7 +121,7 @@ class _HomPageState extends State<HomePage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const AddEventDialog();
+        return const AddDialog();
       },
     );
   }
