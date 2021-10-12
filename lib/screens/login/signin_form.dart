@@ -1,4 +1,7 @@
-import 'package:event_app/views/homepage.dart';
+import 'package:event_app/screens/home/homepage.dart';
+import 'package:event_app/widgets/blue_button.dart';
+import 'package:event_app/widgets/social_login.dart';
+import 'package:event_app/widgets/text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -44,12 +47,41 @@ class _SigninFormState extends State<SigninForm> {
                   ),
                 ],
               ),
-              buildEmail(),
-              buildPassword(),
-              const SizedBox(
-                height: 8,
+              CreateTextField(
+                labelText: 'Email Address',
+                obscure: false,
+                validator: validateEmail,
+                controller: emailSigninController,
+                readOnly: false,
+                prefixIcon: Icons.email,
+                keyboardType: TextInputType.emailAddress,
               ),
-              buildSigninButton(context),
+              CreateTextField(
+                labelText: 'Password',
+                obscure: !_passwordVisible,
+                controller: passwordSigninController,
+                validator: validatePassword,
+                readOnly: false,
+                prefixIcon: Icons.lock,
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _passwordVisible = !_passwordVisible;
+                    });
+                  },
+                  icon: Icon(
+                    _passwordVisible ? Icons.visibility : Icons.visibility_off,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 2,
+              ),
+              CreateButton(
+                text: 'LOGIN',
+                onPressed: () => signIn(
+                    emailSigninController.text, passwordSigninController.text),
+              ),
               TextButton(
                 onPressed: () {},
                 child: const Text(
@@ -57,91 +89,11 @@ class _SigninFormState extends State<SigninForm> {
                   style: TextStyle(fontSize: 10, color: Colors.grey),
                 ),
               ),
-              Text(
-                'Or Login using Social Media:',
-                style: TextStyle(
-                  fontSize: 8,
-                  color: Colors.grey.shade400,
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    "assets/images/fb.png",
-                  ),
-                  const SizedBox(
-                    width: 24,
-                  ),
-                  Image.asset(
-                    "assets/images/google.png",
-                  ),
-                ],
-              )
+              const CreateSocialLogin(),
             ],
           ),
         ),
       ),
-    );
-  }
-
-  Widget buildSigninButton(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {
-        signIn(emailSigninController.text, passwordSigninController.text);
-      },
-      child: const Text(
-        'LOGIN',
-        style: TextStyle(color: Colors.white),
-      ),
-      style: ElevatedButton.styleFrom(
-          shape: const StadiumBorder(),
-          minimumSize: Size(MediaQuery.of(context).size.width * 0.7, 40)),
-    );
-  }
-
-  TextFormField buildPassword() {
-    return TextFormField(
-      obscureText: !_passwordVisible,
-      controller: passwordSigninController,
-      validator: validatePassword,
-      decoration: InputDecoration(
-        labelText: "Password",
-        //hintText: 'Password',
-        prefixIcon: const Icon(
-          Icons.lock,
-          color: Colors.cyan,
-        ),
-        suffixIcon: IconButton(
-          onPressed: () {
-            setState(() {
-              _passwordVisible = !_passwordVisible;
-            });
-          },
-          icon: Icon(
-            _passwordVisible ? Icons.visibility : Icons.visibility_off,
-            color: Colors.grey,
-          ),
-        ),
-      ),
-    );
-  }
-
-  TextFormField buildEmail() {
-    return TextFormField(
-      controller: emailSigninController,
-      validator: validateEmail,
-      decoration: const InputDecoration(
-        labelText: "Email",
-        //hintText: 'Email address',
-        prefixIcon: Icon(
-          Icons.email,
-          color: Colors.cyan,
-        ),
-        // border: UnderlineInputBorder(),
-      ),
-      keyboardType: TextInputType.emailAddress,
-      textInputAction: TextInputAction.done,
     );
   }
 

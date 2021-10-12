@@ -1,6 +1,6 @@
-import 'package:event_app/widgets/blob_painter.dart';
-import 'package:event_app/widgets/signin_form.dart';
-import 'package:event_app/widgets/signup_form.dart';
+import 'package:event_app/screens/login/blob_painter.dart';
+import 'package:event_app/screens/login/signin_form.dart';
+import 'package:event_app/screens/login/signup_form.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
