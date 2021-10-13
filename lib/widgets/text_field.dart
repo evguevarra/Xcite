@@ -9,7 +9,7 @@ class CreateTextField extends StatelessWidget {
   final bool obscure;
   final bool readOnly;
   final FormFieldValidator<String>? validator;
-  final VoidCallback? onTap;
+  final VoidCallback onTap;
   final TextInputType? keyboardType;
 
   const CreateTextField({
@@ -21,7 +21,7 @@ class CreateTextField extends StatelessWidget {
     this.suffixIcon,
     required this.obscure,
     this.validator,
-    this.onTap,
+    required this.onTap,
     this.keyboardType,
     required this.readOnly,
   }) : super(key: key);
@@ -32,7 +32,7 @@ class CreateTextField extends StatelessWidget {
       obscureText: obscure,
       readOnly: readOnly,
       onTap: () {
-        onTap!();
+        onTap();
       },
       controller: controller,
       validator: validator,

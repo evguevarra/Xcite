@@ -55,6 +55,7 @@ class _SigninFormState extends State<SigninForm> {
                 readOnly: false,
                 prefixIcon: Icons.email,
                 keyboardType: TextInputType.emailAddress,
+                onTap: () {},
               ),
               CreateTextField(
                 labelText: 'Password',
@@ -62,6 +63,7 @@ class _SigninFormState extends State<SigninForm> {
                 controller: passwordSigninController,
                 validator: validatePassword,
                 readOnly: false,
+                onTap: () {},
                 prefixIcon: Icons.lock,
                 suffixIcon: IconButton(
                   onPressed: () {

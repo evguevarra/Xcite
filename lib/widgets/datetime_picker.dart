@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class DateTimePicker extends StatefulWidget {
-  final TextEditingController? controller;
+  final TextEditingController controller;
+  final FormFieldValidator<String> validator;
 
-  const DateTimePicker({Key? key, this.controller}) : super(key: key);
+  const DateTimePicker(
+      {Key? key, required this.controller, required this.validator})
+      : super(key: key);
 
   @override
   _DateTimePickerState createState() => _DateTimePickerState();
@@ -29,6 +32,7 @@ class _DateTimePickerState extends State<DateTimePicker> {
       labelText: 'Select Date and Time',
       //hintText: getText(),
       prefixIcon: Icons.calendar_today_outlined,
+      validator: widget.validator,
       onTap: () {
         pickDateTime(context);
       },
@@ -52,7 +56,7 @@ class _DateTimePickerState extends State<DateTimePicker> {
         time.hour,
         time.minute,
       );
-      widget.controller!.text = getText();
+      widget.controller.text = getText();
     });
   }
 
