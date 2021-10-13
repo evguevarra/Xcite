@@ -56,6 +56,7 @@ class _SignupFormState extends State<SignupForm> {
                 controller: fullNameSignupController,
                 readOnly: false,
                 prefixIcon: Icons.person_rounded,
+                onTap: () {},
               ),
               CreateTextField(
                 labelText: 'Email Address',
@@ -65,6 +66,7 @@ class _SignupFormState extends State<SignupForm> {
                 readOnly: false,
                 prefixIcon: Icons.email,
                 keyboardType: TextInputType.emailAddress,
+                onTap: () {},
               ),
               CreateTextField(
                 labelText: 'Password',
@@ -72,6 +74,7 @@ class _SignupFormState extends State<SignupForm> {
                 controller: passwordSignupController,
                 validator: validatePassword,
                 readOnly: false,
+                onTap: () {},
                 prefixIcon: Icons.lock,
                 suffixIcon: IconButton(
                   onPressed: () {

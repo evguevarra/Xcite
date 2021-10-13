@@ -3,10 +3,17 @@ import 'package:flutter/material.dart';
 class CreateDropDown extends StatefulWidget {
   final String hint;
   final List<String> items;
+
+  //final IconData? prefixIcon;
+  //final FormFieldValidator<String> validator;
+
   const CreateDropDown({
     Key? key,
     required this.hint,
     required this.items,
+    //required this.validator,
+    //this.prefixIcon,
+    //required this.validator,
   }) : super(key: key);
 
   @override
@@ -21,24 +28,21 @@ class _CreateDropDownState extends State<CreateDropDown> {
   }
 
   Widget buildThemeDropdown() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey, width: 2),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          hint: Text(widget.hint),
-          value: value,
-          isExpanded: true,
-          items: widget.items.map(buildThemeItem).toList(),
-          onChanged: (value) {
-            setState(() {
-              this.value = value!;
-            });
-          },
+    return SizedBox(
+      height: 40,
+      child: DropdownButtonFormField<String>(
+        hint: Text(
+          widget.hint,
         ),
+        value: value,
+        isExpanded: true,
+        elevation: 4,
+        items: widget.items.map(buildThemeItem).toList(),
+        onChanged: (value) {
+          setState(() {
+            this.value = value;
+          });
+        },
       ),
     );
   }
@@ -48,6 +52,9 @@ class _CreateDropDownState extends State<CreateDropDown> {
         value: item,
         child: Text(
           item,
+          // style: const TextStyle(
+          //   fontSize: 12,
+          // ),
         ));
   }
 }
