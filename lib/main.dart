@@ -1,3 +1,4 @@
+import 'package:event_app/screens/home/homepage.dart';
 import 'package:event_app/screens/login/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.cyan,
       ),
+      // initialRoute: '/',
+      // routes: {
+      //   '/': (context) => const LoginPage(),
+      //   '/home': (context) => const HomePage(),
+      // },
       home: const LoginPage(),
     );
   }
