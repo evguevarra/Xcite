@@ -1,7 +1,9 @@
 //import 'package:event_app/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:event_app/models/user.dart';
+import 'package:event_app/models/core/user.dart';
+import 'package:event_app/screens/home/homepage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class AuthService {
@@ -9,7 +11,11 @@ class AuthService {
 
   AuthService(this._firebaseAuth);
 
-  Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
+  Stream<User?> get authStateChanges => _firebaseAuth.idTokenChanges();
+
+  Future<void> signOut() async {
+    await _firebaseAuth.signOut();
+  }
 
   Future<void> signIn({required String email, required String password}) async {
     await _firebaseAuth
@@ -28,10 +34,12 @@ class AuthService {
     });
   }
 
-  Future<void> signUp(String email, String password, String fullname) async {
+  Future<void> signUp(String email, String password, String fullname,
+      BuildContext context) async {
     await _firebaseAuth
         .createUserWithEmailAndPassword(email: email, password: password)
-        .then((value) => {postDetailsToFirestore(fullname: fullname)})
+        .then((value) =>
+            {postDetailsToFirestore(fullname: fullname, context: context)})
         .catchError((e) {
       Fluttertoast.showToast(
         msg: e!.message,
@@ -40,7 +48,8 @@ class AuthService {
     });
   }
 
-  void postDetailsToFirestore({required String fullname}) async {
+  void postDetailsToFirestore(
+      {required String fullname, required BuildContext context}) async {
     //Firestore call and user model
     //sending values
 
@@ -62,5 +71,9 @@ class AuthService {
       msg: "Account Created Successfully!",
       toastLength: Toast.LENGTH_SHORT,
     );
+    Navigator.pushAndRemoveUntil(
+        (context),
+        MaterialPageRoute(builder: (context) => const HomePage()),
+        (route) => false);
   }
 }

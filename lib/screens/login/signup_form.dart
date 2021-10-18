@@ -1,12 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:event_app/models/user.dart';
-import 'package:event_app/screens/home/homepage.dart';
+import 'package:event_app/models/services/auth_services.dart';
 import 'package:event_app/widgets/blue_button.dart';
 import 'package:event_app/widgets/social_login.dart';
 import 'package:event_app/widgets/text_field.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 
 class SignupForm extends StatefulWidget {
   const SignupForm({
@@ -26,8 +23,6 @@ class _SignupFormState extends State<SignupForm> {
       TextEditingController();
   final TextEditingController fullNameSignupController =
       TextEditingController();
-
-  final _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -92,8 +87,16 @@ class _SignupFormState extends State<SignupForm> {
               ),
               CreateButton(
                 text: 'SIGNUP',
-                onPressed: () => signUp(
-                    emailSignupController.text, passwordSignupController.text),
+                onPressed: () {
+                  if (_key.currentState!.validate()) {
+                    context.read<AuthService>().signUp(
+                          emailSignupController.text,
+                          passwordSignupController.text,
+                          fullNameSignupController.text,
+                          context,
+                        );
+                  }
+                },
               ),
               const CreateSocialLogin(),
             ],
@@ -125,47 +128,5 @@ class _SignupFormState extends State<SignupForm> {
       return 'Password must be at least 8 characters, and must include letters and numbers';
     }
     return null;
-  }
-
-  void signUp(String email, String password) async {
-    if (_key.currentState!.validate()) {
-      await _auth
-          .createUserWithEmailAndPassword(email: email, password: password)
-          .then((value) => {postDetailsToFirestore()})
-          .catchError((e) {
-        Fluttertoast.showToast(
-          msg: e!.message,
-          toastLength: Toast.LENGTH_SHORT,
-        );
-      });
-    }
-  }
-
-  postDetailsToFirestore() async {
-    //Firestore call and user model
-    //sending values
-
-    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-    User? user = _auth.currentUser;
-
-    UserModel userModel = UserModel();
-
-    userModel.email = user!.email;
-    userModel.uid = user.uid;
-    userModel.fullName = fullNameSignupController.text;
-
-    await firebaseFirestore
-        .collection("users")
-        .doc(user.uid)
-        .set(userModel.toMap());
-
-    Fluttertoast.showToast(
-      msg: "Account Created Successfully!",
-      toastLength: Toast.LENGTH_SHORT,
-    );
-    Navigator.pushAndRemoveUntil(
-        (context),
-        MaterialPageRoute(builder: (context) => const HomePage()),
-        (route) => false);
   }
 }

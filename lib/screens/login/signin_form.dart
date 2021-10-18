@@ -1,10 +1,9 @@
-import 'package:event_app/screens/home/homepage.dart';
+import 'package:event_app/models/services/auth_services.dart';
 import 'package:event_app/widgets/blue_button.dart';
 import 'package:event_app/widgets/social_login.dart';
 import 'package:event_app/widgets/text_field.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 
 class SigninForm extends StatefulWidget {
   const SigninForm({
@@ -23,8 +22,6 @@ class _SigninFormState extends State<SigninForm> {
   final TextEditingController passwordSigninController =
       TextEditingController();
 
-  final _auth = FirebaseAuth.instance;
-
   bool _passwordVisible = false;
   @override
   Widget build(BuildContext context) {
@@ -32,7 +29,6 @@ class _SigninFormState extends State<SigninForm> {
       key: _key,
       child: SizedBox(
         height: MediaQuery.of(context).size.height * 0.6,
-        //decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -80,10 +76,10 @@ class _SigninFormState extends State<SigninForm> {
                 height: 2,
               ),
               CreateButton(
-                text: 'LOGIN',
-                onPressed: () => signIn(
-                    emailSigninController.text, passwordSigninController.text),
-              ),
+                  text: 'LOGIN',
+                  onPressed: () => context.read<AuthService>().signIn(
+                      email: emailSigninController.text,
+                      password: passwordSigninController.text)),
               TextButton(
                 onPressed: () {},
                 child: const Text(
@@ -107,26 +103,5 @@ class _SigninFormState extends State<SigninForm> {
   String? validatePassword(String? formPassword) {
     if (formPassword!.isEmpty) return 'Password is required!';
     return null;
-  }
-
-  void signIn(String email, String password) async {
-    if (_key.currentState!.validate()) {
-      await _auth
-          .signInWithEmailAndPassword(email: email, password: password)
-          .then((uid) => {
-                Fluttertoast.showToast(
-                  msg: "Login Successful",
-                  toastLength: Toast.LENGTH_SHORT,
-                ),
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => const HomePage()))
-              })
-          .catchError((e) {
-        Fluttertoast.showToast(
-          msg: e!.message,
-          toastLength: Toast.LENGTH_SHORT,
-        );
-      });
-    }
   }
 }

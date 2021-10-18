@@ -1,7 +1,9 @@
-import 'package:event_app/screens/home/homepage.dart';
-import 'package:event_app/screens/login/login_page.dart';
+import 'package:event_app/models/helper/auth_wrapper.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'models/services/auth_services.dart';
 
 //import 'views/homepage.dart';
 
@@ -17,18 +19,24 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'XCite',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.cyan,
+    return MultiProvider(
+      providers: [
+        Provider<AuthService>(
+          create: (_) => AuthService(FirebaseAuth.instance),
+        ),
+        StreamProvider(
+          create: (context) => context.read<AuthService>().authStateChanges,
+          initialData: null,
+        ),
+      ],
+      child: MaterialApp(
+        title: 'XCite',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.cyan,
+        ),
+        home: const AuthWrapper(),
       ),
-      // initialRoute: '/',
-      // routes: {
-      //   '/': (context) => const LoginPage(),
-      //   '/home': (context) => const HomePage(),
-      // },
-      home: const LoginPage(),
     );
   }
 }
