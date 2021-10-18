@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:event_app/models/user.dart';
+import 'package:event_app/models/core/user.dart';
+import 'package:event_app/models/services/auth_services.dart';
 import 'package:event_app/screens/add_event/add_event_dialog.dart';
 import 'package:event_app/screens/login/login_page.dart';
 import 'package:event_app/screens/home/homepage_blob.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -42,9 +44,7 @@ class _HomPageState extends State<HomePage> {
         // title: const Text('Hello'),
         actions: [
           IconButton(
-              onPressed: () {
-                logout(context);
-              },
+              onPressed: () => context.read<AuthService>().signOut(),
               icon: const Icon(
                 Icons.logout,
                 color: Colors.white,
