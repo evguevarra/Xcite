@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_app/models/core/user.dart';
 import 'package:event_app/models/services/auth_services.dart';
+import 'package:event_app/provider/event_provider.dart';
 import 'package:event_app/screens/add_event/add_event_dialog.dart';
 import 'package:event_app/screens/login/login_page.dart';
 import 'package:event_app/screens/home/homepage_blob.dart';
+import 'package:event_app/widgets/event_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -53,9 +55,31 @@ class _HomPageState extends State<HomePage> {
       ),
       extendBodyBehindAppBar: true,
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           buildHeader(width),
-          buildEmptyEvents(),
+          Flexible(
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height * 0.7,
+              child: Consumer<EventProvider>(
+                builder: (context, EventProvider data, child) {
+                  if (data.getEvent.isEmpty) {
+                    return buildEmptyEvents();
+                  } else {
+                    return ListView.builder(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        itemCount: data.getEvent.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(left: 15, right: 15),
+                            child: EventCard(event: data.getEvent[index]),
+                          );
+                        });
+                  }
+                },
+              ),
+            ),
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
