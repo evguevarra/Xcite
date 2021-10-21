@@ -1,11 +1,12 @@
 import 'dart:ui';
 
+import 'package:event_app/provider/event_provider.dart';
 import 'package:event_app/widgets/blue_button.dart';
 import 'package:event_app/widgets/datetime_picker.dart';
-import 'package:event_app/widgets/dropdown.dart';
 import 'package:event_app/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 
 class AddDialog extends StatefulWidget {
   const AddDialog({Key? key}) : super(key: key);
@@ -17,7 +18,11 @@ class AddDialog extends StatefulWidget {
 class _AddDialogState extends State<AddDialog> {
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   final items = ['Birthday', 'Love', 'Celebration', 'Education', 'Others'];
+  final TextEditingController nameController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
+
+  String? value;
+  //late final CreateDropDown createDropDown = createDropDown.dropDownValue as CreateDropDown;
   @override
   Widget build(BuildContext context) {
     return BackdropFilter(
@@ -39,6 +44,7 @@ class _AddDialogState extends State<AddDialog> {
                 obscure: false,
                 readOnly: false,
                 validator: validateEvent,
+                controller: nameController,
                 onTap: () {},
               ),
               const SizedBox(height: 8),
@@ -47,11 +53,12 @@ class _AddDialogState extends State<AddDialog> {
                 controller: dateController,
               ),
               const SizedBox(height: 8),
-              CreateDropDown(
-                hint: 'Select Themes',
-                items: items,
-                //validator: validateThemes,
-              ),
+              // CreateDropDown(
+              //   hint: 'Select Themes',
+              //   items: items,
+              //   //validator: validateThemes,
+              // ),
+              buildThemeDropdown(),
               const SizedBox(height: 16),
               CreateButton(text: 'ADD EVENT', onPressed: () => addEvent())
             ],
@@ -76,12 +83,44 @@ class _AddDialogState extends State<AddDialog> {
     return "";
   }
 
+  Widget buildThemeDropdown() {
+    return SizedBox(
+      height: 40,
+      child: DropdownButtonFormField<String>(
+        hint: const Text(
+          'Select Themes',
+        ),
+        value: value,
+        isExpanded: true,
+        elevation: 4,
+        items: items.map(buildThemeItem).toList(),
+        onChanged: (value) {
+          setState(() {
+            this.value = value;
+          });
+        },
+      ),
+    );
+  }
+
+  DropdownMenuItem<String> buildThemeItem(String item) {
+    return DropdownMenuItem(
+        value: item,
+        child: Text(
+          item,
+        ));
+  }
+
   void addEvent() {
     if (_key.currentState!.validate()) {
       Fluttertoast.showToast(
         msg: 'Event Added',
         toastLength: Toast.LENGTH_SHORT,
       );
+      Provider.of<EventProvider>(context, listen: false)
+          .addNewEvent(nameController.text, dateController.text, value!);
+      //print(createDropDown.dropDownValue);
+      Navigator.of(context, rootNavigator: true).pop();
     }
   }
 }

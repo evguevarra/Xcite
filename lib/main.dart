@@ -1,4 +1,5 @@
 import 'package:event_app/models/helper/auth_wrapper.dart';
+import 'package:event_app/provider/event_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,9 @@ class MyApp extends StatelessWidget {
         StreamProvider(
           create: (context) => context.read<AuthService>().authStateChanges,
           initialData: null,
+        ),
+        ChangeNotifierProvider<EventProvider>(
+          create: (context) => EventProvider(),
         ),
       ],
       child: MaterialApp(
