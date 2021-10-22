@@ -11,6 +11,7 @@ class CreateTextField extends StatelessWidget {
   final FormFieldValidator<String>? validator;
   final VoidCallback onTap;
   final TextInputType? keyboardType;
+  final int? maxLength;
 
   const CreateTextField({
     Key? key,
@@ -24,6 +25,7 @@ class CreateTextField extends StatelessWidget {
     required this.onTap,
     this.keyboardType,
     required this.readOnly,
+    this.maxLength,
   }) : super(key: key);
 
   @override
@@ -47,6 +49,7 @@ class CreateTextField extends StatelessWidget {
         // border: UnderlineInputBorder(),
       ),
       keyboardType: keyboardType,
+      maxLength: maxLength,
       //textInputAction: TextInputAction.done,
     );
   }

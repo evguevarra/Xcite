@@ -1,4 +1,5 @@
 import 'package:event_app/models/core/event.dart';
+import 'package:event_app/screens/add_event/countdown_view.dart';
 import 'package:flutter/material.dart';
 
 class EventCard extends StatelessWidget {
@@ -29,71 +30,81 @@ class EventCard extends StatelessWidget {
         break;
     }
 
-    return SizedBox(
-      height: 140,
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          Container(
-            height: 110,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(22),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 5,
-                  blurRadius: 5,
-                  offset: const Offset(0, 3),
-                )
-              ],
-            ),
-            child: Container(
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => CountDownViewPage(
+                  title: event.eventName,
+                )));
+      },
+      child: SizedBox(
+        height: 140,
+        child: Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            Container(
+              height: 110,
               decoration: BoxDecoration(
-                color: Colors.white,
                 borderRadius: BorderRadius.circular(22),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 5,
+                    offset: const Offset(0, 3),
+                  )
+                ],
               ),
-            ),
-          ),
-          Positioned(
-            top: 0,
-            left: 0,
-            child: Container(
-              padding: const EdgeInsets.all(15),
-              height: 140,
-              child: Image.asset(
-                imagePath,
-                width: 100,
-                height: 100,
-                fit: BoxFit.scaleDown,
-                scale: 0.6,
-              ),
-            ),
-          ),
-          Positioned(
-            right: 40,
-            child: SizedBox(
-              height: 120,
-              width: size.width - 200,
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      event.eventName,
-                      style: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      event.eventDateTime,
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                  ],
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(22),
                 ),
               ),
             ),
-          )
-        ],
+            Positioned(
+              top: 0,
+              left: 0,
+              child: Container(
+                padding: const EdgeInsets.all(15),
+                height: 140,
+                child: Image.asset(
+                  imagePath,
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.scaleDown,
+                  scale: 0.6,
+                ),
+              ),
+            ),
+            Positioned(
+              right: 40,
+              child: SizedBox(
+                height: 120,
+                width: size.width - 200,
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      FittedBox(
+                        child: Text(
+                          event.eventName,
+                          style: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Text(
+                        event.eventDateTime,
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

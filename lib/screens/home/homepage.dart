@@ -42,8 +42,6 @@ class _HomPageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-
-        // title: const Text('Hello'),
         actions: [
           IconButton(
               onPressed: () => context.read<AuthService>().signOut(),
@@ -83,10 +81,14 @@ class _HomPageState extends State<HomePage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.cyan.shade200,
         onPressed: () {
           showAddDialog(context);
         },
-        child: const Icon(Icons.add),
+        child: Icon(
+          Icons.add,
+          color: Colors.grey.shade700,
+        ),
       ),
     );
   }

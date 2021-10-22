@@ -45,6 +45,7 @@ class _AddDialogState extends State<AddDialog> {
                 readOnly: false,
                 validator: validateEvent,
                 controller: nameController,
+                maxLength: 15,
                 onTap: () {},
               ),
               const SizedBox(height: 8),
