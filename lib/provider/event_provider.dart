@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:event_app/models/core/event.dart';
 import 'package:flutter/material.dart';
 
@@ -8,12 +10,12 @@ class EventProvider extends ChangeNotifier {
     return _events;
   }
 
-  EventProvider() {
-    addNewEvent('Birthdate', 'May 8', 'Birthday');
-    addNewEvent('Love', 'May 8', 'Love');
-    addNewEvent('Education', 'May 8', 'Education');
-    addNewEvent('Celebration', 'May 8', 'Celebration');
-  }
+  // EventProvider() {
+  //   addNewEvent('Birthdate', 'May 8', 'Birthday');
+  //   addNewEvent('Love', 'May 8', 'Love');
+  //   addNewEvent('Education', 'May 8', 'Education');
+  //   addNewEvent('Celebration', 'May 8', 'Celebration');
+  // }
 
   void addNewEvent(String name, String dateTime, String theme) {
     Event event = Event(

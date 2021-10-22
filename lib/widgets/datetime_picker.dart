@@ -21,7 +21,7 @@ class _DateTimePickerState extends State<DateTimePicker> {
     if (dateTime == null) {
       return 'Select Date Time';
     } else {
-      return DateFormat('MM/dd/yyyy HH:mm').format(dateTime!);
+      return DateFormat('yyyy-MM-dd HH:mm:ss').format(dateTime!);
     }
   }
 

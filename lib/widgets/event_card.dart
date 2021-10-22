@@ -1,6 +1,7 @@
 import 'package:event_app/models/core/event.dart';
 import 'package:event_app/screens/add_event/countdown_view.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class EventCard extends StatelessWidget {
   final Event event;
@@ -32,9 +33,13 @@ class EventCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
+        DateTime tempDate =
+            DateFormat("yyyy-MM-dd hh:mm:ss").parse(event.eventDateTime);
+
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => CountDownViewPage(
                   title: event.eventName,
+                  dateTime: tempDate,
                 )));
       },
       child: SizedBox(
